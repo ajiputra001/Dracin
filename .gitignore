@@ -6,6 +6,12 @@ node_modules
 dist
 dist-ssr
 
+# Android build outputs
+android/app/build/
+android/.gradle/
+android/build/
+android/captures/
+
 # Local env files
 *.local
 
