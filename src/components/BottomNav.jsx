@@ -1,9 +1,10 @@
 import React from 'react';
-import { Home, Sparkles, Crown, Bookmark, User } from 'lucide-react';
+import { Home, Sparkles, Crown, Bookmark, User, Film } from 'lucide-react';
 
 export default function BottomNav({ currentView, onViewChange, daftarkuCount }) {
   const tabs = [
     { id: 'home', label: 'Beranda', icon: Home },
+    { id: 'reels', label: 'Reels Shorts', icon: Film, reels: true },
     { id: 'melolo', label: 'Melolo', icon: Sparkles, highlight: true },
     { id: 'vip', label: 'VIP Free', icon: Crown, vip: true },
     { id: 'daftarku', label: 'Daftarku', icon: Bookmark, count: daftarkuCount },
@@ -21,7 +22,7 @@ export default function BottomNav({ currentView, onViewChange, daftarkuCount }) 
             <button
               key={tab.id}
               onClick={() => onViewChange(tab.id)}
-              className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all duration-200 ${
+              className={`relative flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl transition-all duration-200 ${
                 isActive 
                   ? 'text-white font-bold scale-105' 
                   : 'text-slate-400 hover:text-slate-200'
@@ -36,7 +37,9 @@ export default function BottomNav({ currentView, onViewChange, daftarkuCount }) 
                   } ${
                     tab.highlight && isActive ? 'text-amber-400' : ''
                   } ${
-                    isActive && !tab.vip && !tab.highlight ? 'text-red-500' : ''
+                    tab.reels && isActive ? 'text-rose-500' : ''
+                  } ${
+                    isActive && !tab.vip && !tab.highlight && !tab.reels ? 'text-red-500' : ''
                   }`} 
                 />
 

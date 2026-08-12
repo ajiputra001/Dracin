@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
 import SearchModal from './components/SearchModal';
+import AiAssistantModal from './components/AiAssistantModal';
 
 import HomeView from './views/HomeView';
 import DetailView from './views/DetailView';
@@ -15,8 +16,10 @@ import GlobalChatView from './views/GlobalChatView';
 import ProfileView from './views/ProfileView';
 import ApiStatusView from './views/ApiStatusView';
 import PrivacyView from './views/PrivacyView';
+import ReelsView from './views/ReelsView';
 
 import { MOCK_DRAMAS } from './data/mockDramas';
+import { Bot, Sparkles } from 'lucide-react';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -27,6 +30,7 @@ export default function App() {
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isAiOpen, setIsAiOpen] = useState(false);
 
   // LocalStorage state for Daftarku (Saved Bookmarks)
   const [daftarkuIds, setDaftarkuIds] = useState(() => {
@@ -117,8 +121,8 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#0b0c10] text-slate-100 flex flex-col font-sans relative">
       
-      {/* Top App Header (Hidden in Fullscreen Player) */}
-      {currentView !== 'player' && (
+      {/* Top App Header (Hidden in Fullscreen Player or Reels) */}
+      {currentView !== 'player' && currentView !== 'reels' && (
         <Header
           onOpenSidebar={() => setIsSidebarOpen(true)}
           onOpenSearch={() => setIsSearchOpen(true)}
@@ -144,6 +148,15 @@ export default function App() {
             watchHistory={watchHistory}
             activeProvider={activeProvider}
             onOpenVip={() => setCurrentView('vip')}
+          />
+        )}
+
+        {currentView === 'reels' && (
+          <ReelsView
+            dramas={MOCK_DRAMAS}
+            onSelectDrama={handleSelectDrama}
+            daftarkuIds={daftarkuIds}
+            onToggleDaftarku={handleToggleDaftarku}
           />
         )}
 
@@ -231,6 +244,21 @@ export default function App() {
         )}
       </main>
 
+      {/* Floating DRACIN AI Assistant Button */}
+      {currentView !== 'player' && (
+        <button
+          onClick={() => setIsAiOpen(true)}
+          className="fixed bottom-20 right-4 z-40 p-3.5 rounded-full bg-gradient-to-tr from-amber-400 via-rose-500 to-red-600 text-slate-950 shadow-2xl shadow-amber-500/40 border-2 border-amber-300 hover:scale-110 active:scale-95 transition-all group animate-bounce-subtle"
+          title="Tanyakan DRACIN AI Assistant"
+        >
+          <Bot className="w-6 h-6 stroke-[2.5]" />
+          <span className="absolute -top-1 -right-1 flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+          </span>
+        </button>
+      )}
+
       {/* Bottom Floating Navigation Bar (Hidden in Fullscreen Player) */}
       {currentView !== 'player' && (
         <BottomNav
@@ -259,6 +287,14 @@ export default function App() {
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
+        dramas={MOCK_DRAMAS}
+        onSelectDrama={handleSelectDrama}
+      />
+
+      {/* DRACIN AI Smart Recommendation Modal */}
+      <AiAssistantModal
+        isOpen={isAiOpen}
+        onClose={() => setIsAiOpen(false)}
         dramas={MOCK_DRAMAS}
         onSelectDrama={handleSelectDrama}
       />
